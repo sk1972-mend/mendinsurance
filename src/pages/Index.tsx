@@ -38,7 +38,16 @@ export default function Index() {
             <span className="text-xl font-semibold">Mend</span>
           </div>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
+            <Link to="/about" className="text-sm font-medium text-muted-foreground hover:text-foreground">
+              About
+            </Link>
+            <Link to="/partners" className="text-sm font-medium text-muted-foreground hover:text-foreground">
+              Partners
+            </Link>
+            <Link to="/contact" className="text-sm font-medium text-muted-foreground hover:text-foreground">
+              Contact
+            </Link>
             <Link to="/auth">
               <Button variant="ghost">Sign In</Button>
             </Link>
@@ -190,6 +199,11 @@ export default function Index() {
           <div className="flex items-center gap-2">
             <Shield className="h-5 w-5 text-primary" />
             <span className="font-semibold">Mend</span>
+          </div>
+          <div className="flex items-center gap-6 text-sm text-muted-foreground">
+            <Link to="/about" className="hover:text-foreground">About</Link>
+            <Link to="/partners" className="hover:text-foreground">Partners</Link>
+            <Link to="/contact" className="hover:text-foreground">Contact</Link>
           </div>
           <p className="text-sm text-muted-foreground">
             © 2024 Mend. All rights reserved.
