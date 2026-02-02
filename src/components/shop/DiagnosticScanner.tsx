@@ -115,14 +115,25 @@ export function DiagnosticScanner({ onVerified }: DiagnosticScannerProps) {
       const device = devices[0];
 
       // 2. Check for OPEN CLAIM (Digital Handshake Priority)
-      const { data: claims } = await supabase
-        .from("claims")
-        .select("id, repair_type, status")
-        .eq("device_id", device.id)
-        .eq("status", "filed") // Only find claims waiting for shop verification
-        .limit(1);
+      // First get policy IDs for this device, then find claims
+      const { data: devicePolicies } = await supabase
+        .from("policies")
+        .select("id")
+        .eq("device_id", device.id);
 
-      const openClaim = claims && claims.length > 0 ? claims[0] : null;
+      const policyIds = devicePolicies?.map((p) => p.id) || [];
+
+      let openClaim: { id: string; repair_type: string | null; status: string } | null = null;
+      if (policyIds.length > 0) {
+        const { data: claims } = await supabase
+          .from("claims")
+          .select("id, repair_type, status")
+          .in("policy_id", policyIds)
+          .eq("status", "filed")
+          .limit(1);
+
+        openClaim = claims && claims.length > 0 ? claims[0] : null;
+      }
 
       // 3. Check Policy Status (Context)
       const { data: policies } = await supabase
@@ -195,7 +206,7 @@ export function DiagnosticScanner({ onVerified }: DiagnosticScannerProps) {
       const { error } = await supabase
         .from("claims")
         .update({
-          status: "verified",
+          status: "verified_complete",
           // We would also update the shop_id here if it wasn't already set
         })
         .eq("id", result.claim.id);
@@ -210,7 +221,7 @@ export function DiagnosticScanner({ onVerified }: DiagnosticScannerProps) {
       // Update local state to reflect change
       setResult((prev) => ({
         ...prev,
-        claim: prev.claim ? { ...prev.claim, status: "verified" } : undefined,
+        claim: prev.claim ? { ...prev.claim, status: "verified_complete" } : undefined,
       }));
 
       onVerified?.(result.device.id, result.device.serial_number);
@@ -355,7 +366,7 @@ export function DiagnosticScanner({ onVerified }: DiagnosticScannerProps) {
                       Repair Type: <b>{result.claim.repair_type}</b>
                     </p>
 
-                    {result.claim.status === "verified" ? (
+                    {result.claim.status === "verified_complete" ? (
                       <div className="mt-3 p-2 bg-emerald-100 text-emerald-800 text-center rounded font-medium text-sm flex items-center justify-center gap-2">
                         <CheckCircle className="h-4 w-4" /> Authorized
                       </div>
