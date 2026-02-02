@@ -1,148 +1,331 @@
-**Mend Platform - Development Plan**
 
-**Vision**
-A unified device insurance platform that empowers local repair shops ("Average Joes") to act as instant claims centers, transforming them from "waiting for a break" into portfolio builders with recurring passive income.
+# Alignment Review: Master Prompt vs Current Implementation
 
-**Phase 1: Foundation - Database & Authentication**
+## Executive Summary
 
-**1.1 Multi-Role Authentication System**
+The foundation is solid but several key components from the Master Prompt are missing or need refinement. This plan addresses the gaps to bring the codebase into full alignment with the "Rugged Fintech" specifications.
 
-* **User Registration & Login:** Professional-styled auth pages with email/password.
-* **Role-Based Access:** Three distinct portals (Customer, Shop, Admin).
-* **Shop Onboarding Flow:** Tiered certification application (Basic → Advanced → Expert) with admin approval workflow.
+---
 
-**1.2 Core Database Schema**
+## Gap Analysis
 
-* **Profiles:** User identity linked to their role.
-* **Shops:** Partner details, certification tier, Stripe Connect ID, wallet balance.
-* **Devices:** Serial ID, device type (7 categories: Smartphone, Tablet, Laptop, Console, Wearable, Drone, Audio), tier (1-4), health history.
-* **Policies:** Status tracking, linked device(s), referral source per device, monthly premium.
-* **Claims:** Triage status, repair type, photo evidence, Digital Handshake verification.
-* **Financial Ledgers:**
-* *Subscriptions ledger* for recurring 15% commissions.
-* *Claims payout ledger* for instant repair payments.
+### Design System (Priority: High)
 
+**Current State:**
+- Uses HSL-based blues and greens
+- Clean professional aesthetic
 
+**Required Changes:**
+- Update CSS to use exact hex values (#0A2540 Deep Navy, #10B981 Emerald)
+- Add "Rugged Fintech" density - more data-rich layouts
+- Increase contrast for workshop lighting readability
+- Ensure mobile-tablet optimization for shop counter use
 
-**Phase 2: Customer Experience**
+### Missing Components (Priority: Critical)
 
-**2.1 Policy Purchase Flow**
+| Component | Purpose | Status |
+|-----------|---------|--------|
+| `DiagnosticScanner.tsx` | OCR camera-first serial scanner | Not built |
+| `ClaimTriage.tsx` | Step wizard with damage routing | Not built |
+| `RevenueVisualizer.tsx` | ARR calculator with charts | Not built |
+| `ShopAuth.tsx` | Partner certification application | Not built |
+| `ClaimsOversight.tsx` | Admin claims data grid | Not built |
+| `StripeConnect.tsx` | Split payment handling | Not built |
 
-* **Device Selector:** Visual grid for choosing device type (Phone, Laptop, Console, etc.) and specific Model (e.g., "iPhone 14 Pro").
-* **Automated Tier Assignment:** System automatically maps the selected Model to the correct Price Tier (1-4) and Deductible. **Crucial:** Users cannot manually select a cheaper tier; pricing is hard-coded to the device value.
-* **Serial Registration:** Enter device serial number during signup.
-* **Bundle Support:** Add multiple devices to a single account.
+---
 
-**2.2 Policy Portal Dashboard**
+## Implementation Plan
 
-* **Active Coverage View:** See all protected devices with their health status.
-* **Device Health History:** Timeline of diagnostics and repairs.
-* **Claim Filing:** Initiate new claims with issue description.
+### Phase A: Design System Refinement
 
-**2.3 Claim Triage Flow**
+**File: `src/index.css`**
 
-* **Step-by-Step Questionnaire:** Guide customer through damage assessment.
-* **Automatic Routing:** Determine if repair is Local (nearby shop) or Mail-In (Hub).
-* **Shop Finder:** Show nearest certified shop based on repair type needed.
+Update CSS custom properties to use the "Rugged Fintech" palette:
 
-**Phase 3: Shop Partner Dashboard**
+```text
+Changes Required:
+├── --primary: Convert to #0A2540 (Deep Navy Blue)
+├── --success: Verify #10B981 (Emerald Green)
+├── --background: Increase contrast for workshop visibility
+├── Add --navy-* gradient scale for dashboard depth
+└── Typography: Ensure legibility at arm's length
+```
 
-**3.1 Onboarding & Certification**
+**Rationale:** The Master Prompt specifies exact brand colors for trust (navy) and money/success (emerald). Current implementation uses close approximations but should match precisely.
 
-* **Application Form:** Shop details, capabilities, repair specializations.
-* **Tier Assignment:** Based on certifications and equipment (Basic/Advanced/Expert).
-* **Stripe Connect Setup:** Link bank account for receiving payouts.
+---
 
-**3.2 Diagnostic Tools**
+### Phase B: Shop Dashboard - DiagnosticScanner Component
 
-* **10-Point Health Check Form:** Standardized diagnostic workflow.
-* **Photo Evidence Capture:** Upload images of device condition.
-* **OCR Serial Scanner:** Camera-first component to auto-capture IMEI/Serial numbers to prevent "fat finger" typos. Manual entry available only as a fallback.
+**New File: `src/components/shop/DiagnosticScanner.tsx`**
 
-**3.3 Claims Workstation**
+This is the critical "Digital Handshake" component for shop verification.
 
-* **Incoming Claims Queue:** View claims routed to the shop.
-* **Claim Handshake Process:**
-* Customer presents device.
-* Shop **scans** serial number via OCR/Camera.
-* System matches against original underwriting serial.
-* Photo proof uploaded.
-* Repair authorization granted.
+**Behavior Flow:**
+1. Camera viewfinder opens by default (mobile/tablet first)
+2. Technician points camera at device IMEI/serial label
+3. OCR library attempts to read the serial number
+4. If successful: Auto-populate and validate against policies table
+5. Display: Green "Verified Match" badge OR Red "Mismatch Alert"
+6. Manual entry: Hidden fallback (link at bottom "Enter manually")
 
+**Technical Approach:**
+- Use `tesseract.js` for client-side OCR (no server needed)
+- Alternatively: Integrate with device camera via `navigator.mediaDevices`
+- Query Supabase `devices` table to match serial against registered devices
 
-* **Post-Repair Diagnostic:** Submit completion proof to trigger instant payout.
+**Visual Design:**
+```text
+┌─────────────────────────────────────┐
+│         📷 Camera Viewfinder        │
+│    [Point at device serial label]   │
+│                                     │
+│   ┌───────────────────────────┐    │
+│   │                           │    │
+│   │     SCANNING...           │    │
+│   │                           │    │
+│   └───────────────────────────┘    │
+│                                     │
+│   Detected: ABCD1234567890         │
+│   [✓ Verified Match] (green)        │
+│                                     │
+│   ─────── or ───────               │
+│   Can't scan? Enter manually →      │
+└─────────────────────────────────────┘
+```
 
-**3.4 Revenue & Portfolio View**
+---
 
-* **Passive Income Dashboard:** Track monthly recurring commission (15% of premiums).
-* **Projected ARR Calculator:** Annual revenue based on active policies.
-* **Payout History:** View all Stripe transfers received.
-* **Active Policies Count:** Real-time portfolio size.
+### Phase C: Customer Claim Flow - ClaimTriage Component
 
-**Phase 4: Mend Admin Operations**
+**New File: `src/components/customer/ClaimTriage.tsx`**
 
-**4.1 Partner Management**
+**Step-by-Step Wizard:**
 
-* **Shop Application Queue:** Review and approve new shop applications.
-* **Tier Management:** Upgrade/downgrade shop certifications.
-* **Commission Rate Controls:** Set percentage splits by tier.
-* **Performance Metrics:** Track shop claim completion rates.
+1. **Step 1: Select Device** - Choose from user's protected devices
+2. **Step 2: Damage Type** - Radio buttons:
+   - Screen Damage
+   - Battery Issues
+   - Water/Liquid Damage
+   - Logic Board / Internal Failure
+   - Physical Damage (other)
+   - Not Working (unknown cause)
 
-**4.2 Claims Oversight**
+3. **Step 3: Routing Decision** (automatic based on damage type):
 
-* **Global Claims Dashboard:** View all active claims across network.
-* **Fraud Detection Flags:** Highlight serial mismatches or suspicious patterns.
-* **Escalation Queue:** Claims requiring manual review.
+```text
+IF damage_type IN ('screen', 'battery', 'physical'):
+    → Show "Local Shop" route
+    → Display map with nearest certified shops
+    → "Find Nearest Shop" button
 
-**4.3 Financial Operations**
+IF damage_type IN ('water', 'logic_board'):
+    → Show "Mail-In Repair" route
+    → Display Hub address
+    → "Generate Shipping Label" button (UPS/FedEx)
+```
 
-* **Webhook Integration:** Handle Stripe payment events for automated commission crediting.
-* **Batch Payout Processing:** Trigger monthly commission distributions.
-* **Revenue Analytics:** Platform-wide financial reporting.
+4. **Step 4: Confirm & Submit** - Create claim record in Supabase
 
-**4.4 Hub Logistics (Phase 4+)**
+**Database Integration:**
+- Insert into `claims` table with `repair_type` = 'local' or 'mail_in'
+- Set `status` = 'filed'
+- Link to `policy_id` and device
 
-* **Mail-In Label Generation:** UPS/FedEx API integration for complex repairs.
-* **Hub Tracking Dashboard:** Track devices in transit to repair hub.
+---
 
-**The "Digital Handshake" Security Flow**
-This is the core fraud prevention mechanism:
+### Phase D: Shop Revenue Dashboard - RevenueVisualizer Component
 
-1. **At Policy Creation:** Device serial is captured and linked to policy record.
-2. **At Claim Filing:** Customer describes issue, system generates claim ticket.
-3. **At Shop Verification:**
-* Shop scans device serial (OCR Priority).
-* Shop uploads photo of device/serial label.
-* System compares entered serial against original policy serial.
-* *Match* = Claim Authorized → Repair can proceed.
-* *Mismatch* = Claim Flagged → Escalated to Admin for review.
+**New File: `src/components/shop/RevenueVisualizer.tsx`**
 
+**Displays:**
+1. **Monthly Passive Income Card**
+   - Calculated: 15% × SUM(active_policy_premiums)
+   - Real data from `subscriptions_ledger` table
 
-4. **At Claim Completion:** Post-repair diagnostic + photo submitted → Triggers instant Stripe payout.
+2. **Projected ARR Calculator**
+   - Formula: Monthly Passive × 12
+   - Plus average repair revenue estimation
 
-**Design Approach**
+3. **Visual Chart** (using Recharts - already installed)
+   - Line chart showing income trend over past 6 months
+   - Bar chart showing repair payouts
 
-* **Professional & Trustworthy Aesthetic:** Clean, minimal layouts with strategic use of blues and neutral tones.
-* **Trust signals throughout:** Security badges, verification confirmations.
-* **Data-focused dashboards:** Clear typography.
-* **Mobile-responsive:** Optimized for shops using tablets at the counter.
-* **Consistent visual language:** Across all three portals.
+**Data Query:**
+```sql
+SELECT 
+  SUM(amount) as total_commission,
+  DATE_TRUNC('month', credited_at) as month
+FROM subscriptions_ledger
+WHERE shop_id = [current_shop_id]
+GROUP BY month
+ORDER BY month DESC
+LIMIT 6
+```
 
-**Technical Architecture**
+---
 
-* **Frontend:** React with TypeScript, Tailwind CSS, Shadcn/UI components.
-* **Backend:** Supabase (Database, Auth, Edge Functions, Storage for photos).
-* **Payments:** Stripe Connect for shop payouts, Stripe Billing for customer subscriptions.
-* **File Storage:** Supabase Storage for device photos and documentation.
+### Phase E: Shop Onboarding - ShopAuth Component
 
-**MVP Delivery Sequence**
-Since we're building a "Full Thin Slice" - here's the order of implementation:
+**New File: `src/components/shop/ShopApplication.tsx`**
 
-1. **Database & Auth** → Core schema + multi-role login.
-2. **Customer Policy Purchase** → Device selection (auto-tiering) + serial registration + checkout.
-3. **Shop Claim Workstation** → Digital Handshake (OCR) + diagnostic form.
-4. **Admin Approval Flow** → Shop onboarding + claim oversight.
-5. **Stripe Integration** → Subscription billing + Connect payouts.
-6. **Dashboard Polish** → Revenue tracking + portfolio views.
+**Application Form Fields:**
+- Business Name (required)
+- Business Address (required)
+- Business Phone (required)
+- Business Email (required)
+- Years in Business (number input)
+- Certifications (multi-select checkboxes):
+  - Apple Certified
+  - Samsung Authorized
+  - Google Authorized
+  - CompTIA A+
+  - iFixit Certified
+- Equipment List (multi-select):
+  - Micro-soldering Station
+  - Ultrasonic Cleaner
+  - Screen Separator Machine
+  - Battery Calibration Tools
+- Specializations (multi-select from device types)
 
-This gives us a complete circuit: Customer buys protection → Files claim → Shop verifies & repairs → Gets paid → Admin oversees everything.
+**Tier Logic:**
+- Basic: < 2 certifications
+- Advanced: 2-3 certifications + soldering equipment
+- Expert: 4+ certifications + full equipment list
+
+**Database:**
+- Insert into `shops` table with `status = 'pending'`
+- Admin approves via Admin Dashboard
+
+---
+
+### Phase F: Admin Claims Oversight - ClaimsOversight Component
+
+**New File: `src/components/admin/ClaimsOversight.tsx`**
+
+**Data Grid Columns:**
+- Claim ID
+- Customer Name
+- Shop Name (if assigned)
+- Device (Brand + Model)
+- Device Serial
+- Status (filed / in_progress / verified / completed / flagged)
+- Filed Date
+- Actions (View Details, Assign Shop, Flag, Approve)
+
+**Filtering:**
+- Status filter dropdown
+- Date range picker
+- Search by serial number
+
+**Fraud Flags:**
+- Highlight rows where `serial_match = false`
+- Show warning icon for escalated claims
+
+---
+
+### Phase G: Stripe Integration
+
+**New Files:**
+- `supabase/functions/create-checkout-session/index.ts`
+- `supabase/functions/stripe-webhook/index.ts`
+- `src/components/customer/CheckoutButton.tsx`
+
+**Webhook Handler Logic:**
+```text
+ON invoice.payment_succeeded:
+  1. Get policy_id from subscription metadata
+  2. Calculate shop_commission = amount × 0.15
+  3. Find referring_shop_id from policy
+  4. INSERT into subscriptions_ledger (shop_id, policy_id, amount)
+  5. UPDATE shops SET wallet_balance += shop_commission
+```
+
+This requires enabling Stripe via the Lovable Stripe integration first.
+
+---
+
+## File Structure After Implementation
+
+```text
+src/
+├── components/
+│   ├── customer/
+│   │   ├── AddDeviceFlow.tsx (exists)
+│   │   ├── ClaimTriage.tsx (NEW)
+│   │   ├── DeviceModelSelector.tsx (exists)
+│   │   ├── DeviceTypeSelector.tsx (exists)
+│   │   ├── SerialRegistration.tsx (exists)
+│   │   └── CheckoutButton.tsx (NEW)
+│   ├── shop/
+│   │   ├── DiagnosticScanner.tsx (NEW - OCR camera)
+│   │   ├── RevenueVisualizer.tsx (NEW)
+│   │   ├── ShopApplication.tsx (NEW)
+│   │   └── ClaimsQueue.tsx (NEW)
+│   ├── admin/
+│   │   ├── ClaimsOversight.tsx (NEW)
+│   │   ├── ShopApplicationReview.tsx (NEW)
+│   │   └── PartnerManagement.tsx (NEW)
+│   └── ui/ (existing shadcn components)
+├── pages/
+│   ├── customer/
+│   │   └── Dashboard.tsx (update to integrate ClaimTriage)
+│   ├── shop/
+│   │   └── Dashboard.tsx (update with real components)
+│   └── admin/
+│       └── Dashboard.tsx (update with real components)
+└── lib/
+    └── deviceTiers.ts (exists)
+
+supabase/
+└── functions/
+    ├── create-checkout-session/
+    │   └── index.ts (NEW)
+    └── stripe-webhook/
+        └── index.ts (NEW)
+```
+
+---
+
+## Implementation Priority
+
+1. **Design System Update** - Update colors to match exact spec (quick win)
+2. **ClaimTriage.tsx** - Customer claim filing flow (enables core user journey)
+3. **ShopApplication.tsx** - Shop onboarding (enables partner acquisition)
+4. **DiagnosticScanner.tsx** - OCR verification (core differentiator)
+5. **ClaimsOversight.tsx** - Admin oversight (completes the loop)
+6. **RevenueVisualizer.tsx** - Shop motivation (polish)
+7. **Stripe Integration** - Payment processing (monetization)
+
+---
+
+## Technical Notes
+
+### OCR Implementation Options
+
+**Option A: Tesseract.js (Recommended)**
+- Client-side OCR, no server required
+- Works offline after initial load
+- Install: `npm install tesseract.js`
+
+**Option B: Google Cloud Vision**
+- More accurate but requires API key
+- Server-side via Edge Function
+- Adds latency and cost
+
+**Recommendation:** Start with Tesseract.js for MVP, upgrade to Cloud Vision if accuracy is insufficient.
+
+### Map Integration for Shop Finder
+
+For showing "Nearest Local Shop" in ClaimTriage:
+- Can use simple distance calculation if shops have lat/lng
+- Or integrate with Google Maps API / Mapbox for visual map
+- MVP: Show list of shops sorted by distance (no map initially)
+
+---
+
+## Questions Addressed
+
+All original Master Prompt requirements are now mapped to specific implementation tasks. The plan preserves existing working code while adding the missing components.
+
+**Ready to implement on approval.**
