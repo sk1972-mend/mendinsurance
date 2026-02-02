@@ -11,6 +11,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import CustomerDashboard from "./pages/customer/Dashboard";
 import ShopDashboard from "./pages/shop/Dashboard";
+import ShopApply from "./pages/shop/Apply";
 import AdminDashboard from "./pages/admin/Dashboard";
 import NotFound from "./pages/NotFound";
 
@@ -44,6 +45,14 @@ const App = () => (
               element={
                 <ProtectedRoute allowedRoles={['shop']}>
                   <ShopDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/shop/apply" 
+              element={
+                <ProtectedRoute allowedRoles={['customer', 'shop']}>
+                  <ShopApply />
                 </ProtectedRoute>
               } 
             />

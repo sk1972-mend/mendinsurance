@@ -3,122 +3,147 @@
 @tailwind utilities;
 
 /* Mend Platform Design System
-   Professional & Trustworthy Aesthetic
-   Blues and neutral tones for insurance/fintech feel
+   "Rugged Fintech" Aesthetic
+   Deep Navy (#0A2540) for trust, Emerald (#10B981) for success/money
+   High contrast for workshop lighting readability
 */
 
 @layer base {
   :root {
-    /* Core brand colors - Professional blues */
-    --background: 210 20% 98%;
-    --foreground: 222 47% 11%;
+    /* Core brand colors - Rugged Fintech palette */
+    --background: 210 25% 97%;
+    --foreground: 213 75% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 213 75% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 213 75% 15%;
 
-    /* Primary - Trust Blue */
-    --primary: 217 91% 45%;
+    /* Primary - Deep Navy Blue (#0A2540) */
+    --primary: 213 75% 15%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary - Soft slate */
-    --secondary: 214 32% 91%;
-    --secondary-foreground: 222 47% 11%;
+    /* Secondary - Slate gray */
+    --secondary: 215 20% 90%;
+    --secondary-foreground: 213 75% 15%;
 
     /* Muted backgrounds */
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 215 25% 94%;
+    --muted-foreground: 215 20% 45%;
 
-    /* Accent - Lighter trust blue */
-    --accent: 214 95% 93%;
-    --accent-foreground: 217 91% 35%;
+    /* Accent - Light navy tint */
+    --accent: 213 50% 92%;
+    --accent-foreground: 213 75% 15%;
 
     /* Destructive - Alert red */
-    --destructive: 0 84% 60%;
+    --destructive: 0 84% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Success - Confirmation green */
-    --success: 142 71% 45%;
+    /* Success - Emerald Green (#10B981) */
+    --success: 160 84% 39%;
     --success-foreground: 0 0% 100%;
 
-    /* Warning - Caution amber */
+    /* Warning - Amber */
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
 
-    /* Borders and inputs */
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 217 91% 45%;
+    /* Borders and inputs - high contrast */
+    --border: 215 25% 85%;
+    --input: 215 25% 85%;
+    --ring: 213 75% 15%;
 
     --radius: 0.5rem;
 
-    /* Sidebar - Professional slate */
-    --sidebar-background: 222 47% 11%;
+    /* Sidebar - Deep Navy */
+    --sidebar-background: 213 75% 15%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 217 91% 55%;
+    --sidebar-primary: 160 84% 39%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 222 40% 18%;
+    --sidebar-accent: 213 60% 22%;
     --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 222 40% 20%;
-    --sidebar-ring: 217 91% 55%;
+    --sidebar-border: 213 50% 25%;
+    --sidebar-ring: 160 84% 39%;
 
     /* Status colors for claims/policies */
     --status-pending: 38 92% 50%;
-    --status-active: 142 71% 45%;
-    --status-completed: 217 91% 45%;
-    --status-flagged: 0 84% 60%;
+    --status-active: 160 84% 39%;
+    --status-completed: 213 75% 15%;
+    --status-flagged: 0 84% 55%;
 
     /* Tier colors for shops */
-    --tier-basic: 214 32% 50%;
-    --tier-advanced: 217 91% 45%;
-    --tier-expert: 142 71% 45%;
+    --tier-basic: 215 20% 50%;
+    --tier-advanced: 213 75% 35%;
+    --tier-expert: 160 84% 39%;
+
+    /* Navy gradient scale for dashboard depth */
+    --navy-50: 213 50% 97%;
+    --navy-100: 213 50% 92%;
+    --navy-200: 213 50% 85%;
+    --navy-300: 213 55% 70%;
+    --navy-400: 213 60% 50%;
+    --navy-500: 213 70% 35%;
+    --navy-600: 213 75% 25%;
+    --navy-700: 213 75% 18%;
+    --navy-800: 213 75% 15%;
+    --navy-900: 213 80% 10%;
   }
 
   .dark {
-    --background: 222 47% 6%;
+    --background: 213 80% 6%;
     --foreground: 210 40% 98%;
 
-    --card: 222 47% 8%;
+    --card: 213 75% 8%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222 47% 8%;
+    --popover: 213 75% 8%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 217 91% 55%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 160 84% 45%;
+    --primary-foreground: 213 75% 10%;
 
-    --secondary: 222 40% 18%;
+    --secondary: 213 50% 18%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 222 40% 15%;
+    --muted: 213 50% 15%;
     --muted-foreground: 215 20% 65%;
 
-    --accent: 217 40% 25%;
+    --accent: 213 50% 22%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --success: 142 71% 40%;
-    --success-foreground: 0 0% 100%;
+    --success: 160 84% 45%;
+    --success-foreground: 213 75% 10%;
 
-    --warning: 38 92% 45%;
-    --warning-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 213 75% 10%;
 
-    --border: 222 40% 18%;
-    --input: 222 40% 18%;
-    --ring: 217 91% 55%;
+    --border: 213 50% 18%;
+    --input: 213 50% 18%;
+    --ring: 160 84% 45%;
 
-    --sidebar-background: 222 47% 5%;
+    --sidebar-background: 213 80% 5%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 217 91% 55%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 222 40% 12%;
+    --sidebar-primary: 160 84% 45%;
+    --sidebar-primary-foreground: 213 75% 10%;
+    --sidebar-accent: 213 50% 12%;
     --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 222 40% 12%;
-    --sidebar-ring: 217 91% 55%;
+    --sidebar-border: 213 50% 12%;
+    --sidebar-ring: 160 84% 45%;
+
+    /* Navy gradient scale for dark mode */
+    --navy-50: 213 50% 15%;
+    --navy-100: 213 50% 12%;
+    --navy-200: 213 55% 10%;
+    --navy-300: 213 60% 8%;
+    --navy-400: 213 65% 6%;
+    --navy-500: 213 70% 5%;
+    --navy-600: 213 75% 4%;
+    --navy-700: 213 80% 3%;
+    --navy-800: 213 85% 2%;
+    --navy-900: 213 90% 1%;
   }
 }
 
@@ -132,9 +157,21 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
-  /* Professional typography */
+  /* Professional typography - High contrast for workshop visibility */
   h1, h2, h3, h4, h5, h6 {
     @apply font-semibold tracking-tight text-foreground;
+  }
+
+  h1 {
+    @apply text-3xl md:text-4xl;
+  }
+
+  h2 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  h3 {
+    @apply text-xl md:text-2xl;
   }
 }
 
@@ -146,7 +183,7 @@
 
   /* Status indicator */
   .status-dot {
-    @apply h-2 w-2 rounded-full;
+    @apply h-2.5 w-2.5 rounded-full;
   }
 
   .status-dot--pending {
@@ -165,9 +202,26 @@
     @apply bg-[hsl(var(--status-flagged))];
   }
 
-  /* Card hover effect for dashboard items */
+  /* Card hover effect for dashboard items - Expert-grade density */
   .dashboard-card {
-    @apply rounded-lg border bg-card p-6 shadow-sm transition-shadow hover:shadow-md;
+    @apply rounded-lg border bg-card p-5 shadow-sm transition-all hover:shadow-md hover:border-primary/30;
+  }
+
+  /* Data-rich card for workshop displays */
+  .data-card {
+    @apply rounded-lg border-2 bg-card p-4 shadow-sm;
+  }
+
+  .data-card--highlight {
+    @apply border-success bg-success/5;
+  }
+
+  .data-card--warning {
+    @apply border-warning bg-warning/5;
+  }
+
+  .data-card--error {
+    @apply border-destructive bg-destructive/5;
   }
 
   /* Tier badges */
@@ -176,14 +230,48 @@
   }
 
   .tier-badge--basic {
-    @apply bg-[hsl(var(--tier-basic)/0.1)] text-[hsl(var(--tier-basic))];
+    @apply bg-[hsl(var(--tier-basic)/0.15)] text-[hsl(var(--tier-basic))];
   }
 
   .tier-badge--advanced {
-    @apply bg-[hsl(var(--tier-advanced)/0.1)] text-[hsl(var(--tier-advanced))];
+    @apply bg-[hsl(var(--tier-advanced)/0.15)] text-[hsl(var(--tier-advanced))];
   }
 
   .tier-badge--expert {
-    @apply bg-[hsl(var(--tier-expert)/0.1)] text-[hsl(var(--tier-expert))];
+    @apply bg-[hsl(var(--tier-expert)/0.15)] text-[hsl(var(--tier-expert))];
+  }
+
+  /* Stat cards for dashboard - Large readable numbers */
+  .stat-value {
+    @apply text-2xl md:text-3xl font-bold tracking-tight;
+  }
+
+  .stat-label {
+    @apply text-sm text-muted-foreground font-medium;
+  }
+
+  /* Scanner overlay for OCR */
+  .scanner-overlay {
+    @apply absolute inset-0 border-4 border-dashed border-primary/50 rounded-lg pointer-events-none;
+  }
+
+  .scanner-active {
+    @apply border-success animate-pulse;
+  }
+
+  /* High-contrast buttons for workshop use */
+  .btn-workshop {
+    @apply h-14 text-lg font-semibold px-8;
+  }
+}
+
+/* Utility for workshop visibility - larger touch targets */
+@layer utilities {
+  .touch-target {
+    @apply min-h-[48px] min-w-[48px];
+  }
+
+  .touch-target-lg {
+    @apply min-h-[56px] min-w-[56px];
   }
 }

@@ -16,57 +16,61 @@ export function useDevices() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const fetchDevices = async () => {
     if (!user) {
       setDevices([]);
       setLoading(false);
       return;
     }
 
-    async function fetchDevices() {
-      try {
-        setLoading(true);
-        
-        // Fetch devices
-        const { data: deviceData, error: deviceError } = await supabase
-          .from('devices')
+    try {
+      setLoading(true);
+      
+      // Fetch devices
+      const { data: deviceData, error: deviceError } = await supabase
+        .from('devices')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (deviceError) throw deviceError;
+
+      // Fetch policies for these devices
+      const deviceIds = deviceData.map(d => d.id);
+      
+      if (deviceIds.length > 0) {
+        const { data: policyData, error: policyError } = await supabase
+          .from('policies')
           .select('*')
-          .eq('user_id', user!.id)
-          .order('created_at', { ascending: false });
+          .in('device_id', deviceIds);
 
-        if (deviceError) throw deviceError;
+        if (policyError) throw policyError;
 
-        // Fetch policies for these devices
-        const deviceIds = deviceData.map(d => d.id);
-        
-        if (deviceIds.length > 0) {
-          const { data: policyData, error: policyError } = await supabase
-            .from('policies')
-            .select('*')
-            .in('device_id', deviceIds);
+        // Combine devices with their policies
+        const devicesWithPolicies = deviceData.map(device => ({
+          ...device,
+          policy: policyData?.find(p => p.device_id === device.id) || null,
+        }));
 
-          if (policyError) throw policyError;
-
-          // Combine devices with their policies
-          const devicesWithPolicies = deviceData.map(device => ({
-            ...device,
-            policy: policyData?.find(p => p.device_id === device.id) || null,
-          }));
-
-          setDevices(devicesWithPolicies);
-        } else {
-          setDevices([]);
-        }
-      } catch (err) {
-        console.error('Error fetching devices:', err);
-        setError(err instanceof Error ? err.message : 'Failed to load devices');
-      } finally {
-        setLoading(false);
+        setDevices(devicesWithPolicies);
+      } else {
+        setDevices([]);
       }
+    } catch (err) {
+      console.error('Error fetching devices:', err);
+      setError(err instanceof Error ? err.message : 'Failed to load devices');
+    } finally {
+      setLoading(false);
     }
+  };
 
+  useEffect(() => {
     fetchDevices();
   }, [user]);
 
-  return { devices, loading, error };
+  const refetch = () => {
+    fetchDevices();
+  };
+
+  return { devices, loading, error, refetch };
 }
