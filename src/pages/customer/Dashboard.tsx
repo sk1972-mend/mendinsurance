@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useDevices } from '@/hooks/useDevices';
 import { AddDeviceFlow } from '@/components/customer/AddDeviceFlow';
+import { ClaimTriage } from '@/components/customer/ClaimTriage';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -29,6 +30,9 @@ export default function CustomerDashboard() {
   const { user, signOut } = useAuth();
   const { devices, loading } = useDevices();
   const [addDeviceOpen, setAddDeviceOpen] = useState(false);
+  const [claimTriageOpen, setClaimTriageOpen] = useState(false);
+
+  const activeDevices = devices.filter(d => d.policy?.status === 'active');
 
   return (
     <div className="min-h-screen bg-background">
@@ -76,7 +80,10 @@ export default function CustomerDashboard() {
             </CardHeader>
           </Card>
 
-          <Card className="dashboard-card cursor-pointer transition-all hover:border-primary">
+          <Card 
+            className="dashboard-card cursor-pointer transition-all hover:border-warning"
+            onClick={() => setClaimTriageOpen(true)}
+          >
             <CardHeader className="flex flex-row items-center gap-4">
               <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-warning/10">
                 <FileText className="h-6 w-6 text-warning" />
@@ -88,14 +95,14 @@ export default function CustomerDashboard() {
             </CardHeader>
           </Card>
 
-          <Card className="dashboard-card cursor-pointer transition-all hover:border-primary">
+          <Card className="dashboard-card">
             <CardHeader className="flex flex-row items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent">
-                <Smartphone className="h-6 w-6 text-accent-foreground" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-success/10">
+                <Smartphone className="h-6 w-6 text-success" />
               </div>
               <div>
                 <CardTitle className="text-lg">My Devices</CardTitle>
-                <CardDescription>{devices.length} protected</CardDescription>
+                <CardDescription>{activeDevices.length} protected</CardDescription>
               </div>
             </CardHeader>
           </Card>
@@ -189,8 +196,9 @@ export default function CustomerDashboard() {
         </section>
       </main>
 
-      {/* Add Device Flow Dialog */}
+      {/* Dialogs */}
       <AddDeviceFlow open={addDeviceOpen} onOpenChange={setAddDeviceOpen} />
+      <ClaimTriage open={claimTriageOpen} onOpenChange={setClaimTriageOpen} />
     </div>
   );
 }
