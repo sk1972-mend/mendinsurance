@@ -33,6 +33,9 @@ export default function Index() {
         case 'shop':
           navigate('/shop');
           break;
+        case 'enterprise':
+          navigate('/enterprise');
+          break;
         case 'customer':
         default:
           navigate('/dashboard');

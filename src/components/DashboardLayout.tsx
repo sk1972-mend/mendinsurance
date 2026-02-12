@@ -28,6 +28,7 @@ const routeLabels: Record<string, string> = {
   dashboard: 'Dashboard',
   shop: 'Shop',
   admin: 'Admin',
+  enterprise: 'Enterprise',
   scanner: 'Scanner',
   queue: 'Claims Queue',
   revenue: 'Revenue',
@@ -37,6 +38,7 @@ const routeLabels: Record<string, string> = {
   partners: 'Partner Network',
   settings: 'Settings',
   apply: 'Apply',
+  risk: 'Fleet Risk',
 };
 
 // Check if a segment looks like a UUID

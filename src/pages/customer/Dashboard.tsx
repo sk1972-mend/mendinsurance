@@ -6,17 +6,13 @@ import { ClaimTriage } from '@/components/customer/ClaimTriage';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Smartphone, Tablet, Laptop, Gamepad2, Watch, Plane, Headphones, FileText, Plus, Loader2 } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Smartphone, Tablet, Laptop, Gamepad2, Watch, Plane, Headphones, FileText, Plus, Loader2, AlertTriangle, Shield, CreditCard, MessageCircle, Phone } from 'lucide-react';
 import { TIER_PRICING } from '@/lib/deviceTiers';
 
 const deviceIcons: Record<string, React.ComponentType<{ className?: string }>> = {
-  smartphone: Smartphone,
-  tablet: Tablet,
-  laptop: Laptop,
-  console: Gamepad2,
-  wearable: Watch,
-  drone: Plane,
-  audio: Headphones,
+  smartphone: Smartphone, tablet: Tablet, laptop: Laptop, console: Gamepad2,
+  wearable: Watch, drone: Plane, audio: Headphones,
 };
 
 const statusColors: Record<string, string> = {
@@ -31,57 +27,71 @@ export default function CustomerDashboard() {
   const { devices, loading } = useDevices();
   const [addDeviceOpen, setAddDeviceOpen] = useState(false);
   const [claimTriageOpen, setClaimTriageOpen] = useState(false);
+  const [conciergeOpen, setConciergeOpen] = useState(false);
 
   const activeDevices = devices.filter(d => d.policy?.status === 'active');
+  const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'there';
 
   return (
     <div className="space-y-8">
-      {/* Welcome Header */}
-      <div>
-        <h1 className="text-3xl font-bold">Welcome back!</h1>
-        <p className="text-muted-foreground">Manage your device protection and claims.</p>
+      {/* Hero Section */}
+      <div className="rounded-xl border-2 border-success/20 bg-success/5 p-6 md:p-8">
+        <div className="flex items-center gap-3 mb-2">
+          <Shield className="h-6 w-6 text-success" />
+          <Badge variant="outline" className="border-success/30 bg-success/10 text-success font-semibold">
+            Protected
+          </Badge>
+        </div>
+        <h1 className="text-3xl font-bold">Welcome back, {userName}.</h1>
+        <p className="text-muted-foreground mt-1">
+          {activeDevices.length} device{activeDevices.length !== 1 ? 's' : ''} under active protection.
+        </p>
       </div>
 
-      {/* Quick actions */}
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card 
-          className="dashboard-card cursor-pointer transition-all hover:border-primary"
+      {/* Primary Action: File a Claim — Big Red Button */}
+      <Card
+        className="cursor-pointer border-2 border-warning/40 bg-warning/5 transition-all hover:border-warning hover:shadow-lg"
+        onClick={() => setClaimTriageOpen(true)}
+      >
+        <CardHeader className="flex flex-row items-center gap-5 p-6 md:p-8">
+          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-warning/20">
+            <AlertTriangle className="h-8 w-8 text-warning" />
+          </div>
+          <div className="flex-1">
+            <CardTitle className="text-xl md:text-2xl">File a Claim</CardTitle>
+            <CardDescription className="text-sm md:text-base">
+              Device damaged? Start your repair request now. We'll match you with the nearest certified shop.
+            </CardDescription>
+          </div>
+          <FileText className="hidden h-6 w-6 text-warning md:block" />
+        </CardHeader>
+      </Card>
+
+      {/* Secondary Cards Grid */}
+      <div className="grid gap-4 md:grid-cols-2">
+        <Card
+          className="cursor-pointer transition-all hover:border-primary/40 hover:shadow-md"
           onClick={() => setAddDeviceOpen(true)}
         >
           <CardHeader className="flex flex-row items-center gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-              <Plus className="h-6 w-6 text-primary" />
+              <Shield className="h-6 w-6 text-primary" />
             </div>
             <div>
-              <CardTitle className="text-lg">Add Device</CardTitle>
-              <CardDescription>Protect a new device</CardDescription>
+              <CardTitle className="text-lg">My Coverage</CardTitle>
+              <CardDescription>{activeDevices.length} active · {devices.length} total devices</CardDescription>
             </div>
           </CardHeader>
         </Card>
 
-        <Card 
-          className="dashboard-card cursor-pointer transition-all hover:border-warning"
-          onClick={() => setClaimTriageOpen(true)}
-        >
+        <Card className="transition-all hover:border-primary/40 hover:shadow-md">
           <CardHeader className="flex flex-row items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-warning/10">
-              <FileText className="h-6 w-6 text-warning" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+              <CreditCard className="h-6 w-6 text-primary" />
             </div>
             <div>
-              <CardTitle className="text-lg">File a Claim</CardTitle>
-              <CardDescription>Report damage or issues</CardDescription>
-            </div>
-          </CardHeader>
-        </Card>
-
-        <Card className="dashboard-card">
-          <CardHeader className="flex flex-row items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-success/10">
-              <Smartphone className="h-6 w-6 text-success" />
-            </div>
-            <div>
-              <CardTitle className="text-lg">My Devices</CardTitle>
-              <CardDescription>{activeDevices.length} protected</CardDescription>
+              <CardTitle className="text-lg">Billing</CardTitle>
+              <CardDescription>View payment history & invoices</CardDescription>
             </div>
           </CardHeader>
         </Card>
@@ -125,7 +135,6 @@ export default function CustomerDashboard() {
               const DeviceIcon = deviceIcons[device.device_type] || Smartphone;
               const tierInfo = TIER_PRICING[device.tier];
               const status = device.policy?.status || 'pending';
-              
               return (
                 <Card key={device.id} className="transition-all hover:shadow-md">
                   <CardHeader className="pb-3">
@@ -136,34 +145,27 @@ export default function CustomerDashboard() {
                         </div>
                         <div>
                           <CardTitle className="text-base">{device.brand} {device.model}</CardTitle>
-                          <CardDescription className="text-xs font-mono">
-                            {device.serial_number}
-                          </CardDescription>
+                          <CardDescription className="text-xs font-mono">{device.serial_number}</CardDescription>
                         </div>
                       </div>
-                      <Badge variant="outline" className={statusColors[status]}>
-                        {status}
-                      </Badge>
+                      <Badge variant="outline" className={statusColors[status]}>{status}</Badge>
                     </div>
                   </CardHeader>
                   <CardContent>
                     <div className="flex items-center justify-between text-sm">
                       <div>
                         <p className="text-muted-foreground">Premium</p>
-                        <p className="font-semibold">${tierInfo?.monthlyPremium || device.policy?.monthly_premium}/mo</p>
+                        <p className="font-semibold font-mono">${tierInfo?.monthlyPremium || device.policy?.monthly_premium}/mo</p>
                       </div>
                       <div className="text-right">
                         <p className="text-muted-foreground">Deductible</p>
-                        <p className="font-semibold">${tierInfo?.deductible || device.policy?.deductible}</p>
+                        <p className="font-semibold font-mono">${tierInfo?.deductible || device.policy?.deductible}</p>
                       </div>
                     </div>
-                    
                     {device.health_status && (
                       <div className="mt-3 flex items-center gap-2 rounded-lg bg-success/10 px-3 py-2">
                         <div className="h-2 w-2 rounded-full bg-success" />
-                        <span className="text-xs font-medium text-success">
-                          Health: {device.health_status}
-                        </span>
+                        <span className="text-xs font-medium text-success">Health: {device.health_status}</span>
                       </div>
                     )}
                   </CardContent>
@@ -177,6 +179,41 @@ export default function CustomerDashboard() {
       {/* Dialogs */}
       <AddDeviceFlow open={addDeviceOpen} onOpenChange={setAddDeviceOpen} />
       <ClaimTriage open={claimTriageOpen} onOpenChange={setClaimTriageOpen} />
+
+      {/* Concierge Dialog */}
+      <Dialog open={conciergeOpen} onOpenChange={setConciergeOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Contact Concierge</DialogTitle>
+            <DialogDescription>Get help from our dedicated support team.</DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-3 py-4">
+            <Button variant="outline" className="h-14 justify-start gap-3 border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+              <MessageCircle className="h-5 w-5" />
+              <div className="text-left">
+                <p className="font-semibold">Chat with Support</p>
+                <p className="text-xs opacity-70">Average response: 2 min</p>
+              </div>
+            </Button>
+            <Button variant="outline" className="h-14 justify-start gap-3 border-2 border-success text-success hover:bg-success hover:text-white">
+              <Phone className="h-5 w-5" />
+              <div className="text-left">
+                <p className="font-semibold">Call 24/7 Line</p>
+                <p className="text-xs opacity-70">1-800-MEND-NOW</p>
+              </div>
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Floating Concierge Button */}
+      <button
+        onClick={() => setConciergeOpen(true)}
+        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-110"
+        aria-label="Contact Concierge"
+      >
+        <MessageCircle className="h-6 w-6" />
+      </button>
     </div>
   );
 }
