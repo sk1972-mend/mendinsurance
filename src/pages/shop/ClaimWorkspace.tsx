@@ -8,8 +8,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import mendLogo from '@/assets/mend-logo.png';
 import {
-  Shield,
   ArrowLeft,
   Loader2,
   CheckCircle,
@@ -200,7 +200,7 @@ export default function ClaimWorkspacePage() {
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div className="flex items-center gap-2">
-              <Shield className="h-6 w-6 text-sidebar-primary" />
+              <img src={mendLogo} alt="Mend" className="h-6 w-auto brightness-0 invert" />
               <span className="text-lg font-semibold text-sidebar-primary-foreground">
                 Mend OS
               </span>
@@ -238,7 +238,7 @@ export default function ClaimWorkspacePage() {
       {!isVerified && (
         <div className="space-y-3">
           <h3 className="flex items-center gap-2 text-lg font-semibold">
-            <Shield className="h-5 w-5 text-primary" />
+            <img src={mendLogo} alt="Mend" className="h-5 w-auto" />
             Phase 1 — Device Verification
           </h3>
           <p className="text-sm text-muted-foreground">

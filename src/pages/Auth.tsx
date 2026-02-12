@@ -7,7 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Shield, Loader2 } from 'lucide-react';
+import { Loader2, Shield } from 'lucide-react';
+import mendLogo from '@/assets/mend-logo.png';
 import { z } from 'zod';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
@@ -161,9 +162,7 @@ export default function Auth() {
       <div className="w-full max-w-md space-y-8">
         {/* Logo and branding */}
         <div className="text-center">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary">
-            <Shield className="h-8 w-8 text-primary-foreground" />
-          </div>
+          <img src={mendLogo} alt="Mend" className="mx-auto h-16 w-auto" />
           <h1 className="mt-4 text-3xl font-bold tracking-tight text-foreground">Mend</h1>
           <p className="mt-2 text-sm text-muted-foreground">
             Device protection, simplified.
