@@ -25,6 +25,7 @@ import NotFound from "./pages/NotFound";
 import { DiagnosticScanner } from "@/components/shop/DiagnosticScanner";
 import { ClaimsQueue } from "@/components/shop/ClaimsQueue";
 import { RevenueVisualizer } from "@/components/shop/RevenueVisualizer";
+import { ClaimWorkspace } from "@/components/shop/ClaimWorkspace";
 
 const queryClient = new QueryClient();
 
@@ -107,6 +108,14 @@ const App = () => (
                 element={
                   <ProtectedRoute allowedRoles={['shop']}>
                     <RevenueVisualizer />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/shop/claims/:claimId"
+                element={
+                  <ProtectedRoute allowedRoles={['shop']}>
+                    <ClaimWorkspace />
                   </ProtectedRoute>
                 }
               />
