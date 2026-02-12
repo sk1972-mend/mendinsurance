@@ -1,5 +1,6 @@
 import { Outlet, useLocation, Link } from 'react-router-dom';
-import { Bell, ChevronRight, LogOut, Shield, User } from 'lucide-react';
+import { Bell, ChevronRight, LogOut, User } from 'lucide-react';
+import mendLogo from '@/assets/mend-logo.png';
 import { useAuth } from '@/hooks/useAuth';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/AppSidebar';
@@ -72,7 +73,7 @@ export function DashboardLayout() {
                   <BreadcrumbItem>
                     <BreadcrumbLink asChild>
                       <Link to="/" className="flex items-center gap-1.5 text-primary hover:text-primary/80">
-                        <Shield className="h-4 w-4" />
+                        <img src={mendLogo} alt="Mend" className="h-5 w-auto" />
                         <span className="font-semibold">Mend</span>
                       </Link>
                     </BreadcrumbLink>

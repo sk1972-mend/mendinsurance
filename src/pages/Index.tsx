@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
+import mendLogo from '@/assets/mend-logo.png';
 import {
   Shield,
   Smartphone,
@@ -46,9 +47,7 @@ export default function Index() {
       <nav className="sticky top-0 z-50 border-b bg-card/90 backdrop-blur-md">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-              <Shield className="h-5 w-5 text-primary-foreground" />
-            </div>
+            <img src={mendLogo} alt="Mend" className="h-9 w-auto" />
             <span className="text-xl font-semibold">Men<span className="text-success">d</span></span>
           </div>
 
@@ -286,7 +285,7 @@ export default function Index() {
       {/* ─── Final CTA ─── */}
       <section className="container py-20 text-center">
         <div className="mx-auto max-w-2xl rounded-2xl border-2 border-primary/20 bg-card p-10 shadow-lg md:p-14">
-          <Shield className="mx-auto mb-4 h-12 w-12 text-primary" />
+          <img src={mendLogo} alt="Mend" className="mx-auto mb-4 h-12 w-auto" />
           <h2 className="mb-3 text-3xl font-bold">Ready to join the network?</h2>
           <p className="mb-8 text-muted-foreground">
             Whether you're protecting a device or fixing one, Mend has you covered.
@@ -311,7 +310,7 @@ export default function Index() {
         <div className="container">
           <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
             <div className="flex items-center gap-2">
-              <Shield className="h-5 w-5 text-sidebar-primary" />
+              <img src={mendLogo} alt="Mend" className="h-6 w-auto brightness-0 invert" />
               <span className="font-semibold text-sidebar-primary-foreground">Men<span className="text-success">d</span></span>
             </div>
             <div className="flex items-center gap-6 text-sm text-sidebar-primary-foreground/60">

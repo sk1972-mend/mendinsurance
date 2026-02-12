@@ -1,4 +1,5 @@
-import { Shield, Smartphone, FileText, User, LayoutDashboard, ScanLine, ClipboardList, TrendingUp, Activity, AlertTriangle, Store, Settings } from 'lucide-react';
+import { Smartphone, FileText, User, LayoutDashboard, ScanLine, ClipboardList, TrendingUp, Activity, AlertTriangle, Store, Settings } from 'lucide-react';
+import mendLogo from '@/assets/mend-logo.png';
 import { NavLink } from '@/components/NavLink';
 import { useAuth } from '@/hooks/useAuth';
 import {
@@ -73,9 +74,7 @@ export function AppSidebar() {
       {/* Header - Deep Navy with Mend OS branding */}
       <SidebarHeader className="border-b border-sidebar-border bg-sidebar px-4 py-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-sidebar-primary">
-            <Shield className="h-5 w-5 text-sidebar-primary-foreground" />
-          </div>
+          <img src={mendLogo} alt="Mend" className="h-9 w-auto shrink-0 brightness-0 invert" />
           {!isCollapsed && (
             <div>
               <span className="text-lg font-semibold text-sidebar-foreground">Mend</span>

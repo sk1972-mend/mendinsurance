@@ -8,8 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import mendLogo from '@/assets/mend-logo.png';
 import {
-  Shield,
   Building,
   Phone,
   Mail,
@@ -160,9 +160,7 @@ export function ShopApplication({ onSuccess }: ShopApplicationProps) {
     <div className="max-w-3xl mx-auto">
       <div className="mb-8 text-center">
         <div className="flex justify-center mb-4">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary">
-            <Shield className="h-8 w-8 text-primary-foreground" />
-          </div>
+          <img src={mendLogo} alt="Mend" className="h-16 w-auto" />
         </div>
         <h1 className="text-3xl font-bold mb-2">Partner Certification Application</h1>
         <p className="text-muted-foreground">
