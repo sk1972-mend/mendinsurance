@@ -47,8 +47,7 @@ export default function Index() {
       <nav className="sticky top-0 z-50 border-b bg-card/90 backdrop-blur-md">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src={mendLogo} alt="Mend" className="h-9 w-auto" />
-            <span className="text-xl font-semibold">Men<span className="text-success">d</span></span>
+           <img src={mendLogo} alt="Mend" className="h-9 w-auto" />
           </div>
 
           {/* Desktop nav */}
