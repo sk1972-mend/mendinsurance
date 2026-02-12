@@ -2,7 +2,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Loader2 } from 'lucide-react';
 
-type AppRole = 'customer' | 'shop' | 'admin';
+type AppRole = 'customer' | 'shop' | 'admin' | 'enterprise';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -25,14 +25,14 @@ export default function ProtectedRoute({ children, allowedRoles }: ProtectedRout
     return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 
-  // If roles are specified, check if user has required role
   if (allowedRoles && role && !allowedRoles.includes(role)) {
-    // Redirect to appropriate dashboard based on role
     switch (role) {
       case 'admin':
         return <Navigate to="/admin" replace />;
       case 'shop':
         return <Navigate to="/shop" replace />;
+      case 'enterprise':
+        return <Navigate to="/enterprise" replace />;
       case 'customer':
       default:
         return <Navigate to="/dashboard" replace />;
