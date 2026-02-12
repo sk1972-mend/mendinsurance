@@ -158,7 +158,7 @@ export default function Index() {
               </li>
             </ul>
             <Link to="/auth">
-              <Button className="w-full gap-2">
+              <Button className="w-full gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
                 Get Protected <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
@@ -188,7 +188,7 @@ export default function Index() {
             </div>
 
             <Link to="/partners">
-              <Button className="w-full gap-2 bg-success text-success-foreground hover:bg-success/90">
+              <Button className="w-full gap-2 bg-success text-white hover:bg-success/90 border-none">
                 Become a Partner <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
@@ -218,7 +218,7 @@ export default function Index() {
               </li>
             </ul>
             <Link to="/contact">
-              <Button variant="outline" className="w-full gap-2 border-sidebar-primary-foreground/30 text-sidebar-primary-foreground hover:bg-sidebar-accent/20">
+              <Button variant="outline" className="w-full gap-2 border-2 border-sidebar-primary-foreground/60 text-sidebar-primary-foreground hover:bg-sidebar-primary-foreground hover:text-sidebar transition-colors">
                 Contact Sales <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
@@ -296,7 +296,7 @@ export default function Index() {
               </Button>
             </Link>
             <Link to="/partners">
-              <Button size="lg" variant="outline" className="gap-2">
+              <Button size="lg" variant="outline" className="gap-2 border-2 border-primary text-primary hover:bg-primary hover:text-white transition-colors">
                 Shop Owner? Apply Here <Store className="h-4 w-4" />
               </Button>
             </Link>
