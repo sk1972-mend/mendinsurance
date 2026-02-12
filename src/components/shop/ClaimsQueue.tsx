@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ClipboardList, Clock, MapPin, Wrench, Loader2, Phone, CheckCircle } from 'lucide-react';
+import { ClipboardList, Clock, MapPin, Wrench, Loader2, Phone, CheckCircle, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface ClaimWithPolicy {
@@ -33,6 +34,7 @@ const statusColors: Record<string, string> = {
 
 export function ClaimsQueue() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [claims, setClaims] = useState<ClaimWithPolicy[]>([]);
   const [loading, setLoading] = useState(true);
   const [shopId, setShopId] = useState<string | null>(null);
@@ -225,15 +227,15 @@ export function ClaimsQueue() {
 
                   <div className="flex gap-2">
                     {claim.status === 'assigned' && (
-                      <Button onClick={() => handleStartRepair(claim.id)}>
+                      <Button onClick={() => navigate(`/shop/claims/${claim.id}`)}>
                         <Wrench className="mr-2 h-4 w-4" />
                         Start Repair
                       </Button>
                     )}
                     {claim.status === 'in_progress' && (
-                      <Button variant="outline">
-                        <CheckCircle className="mr-2 h-4 w-4" />
-                        Complete
+                      <Button variant="outline" onClick={() => navigate(`/shop/claims/${claim.id}`)}>
+                        <ExternalLink className="mr-2 h-4 w-4" />
+                        Open Workspace
                       </Button>
                     )}
                   </div>

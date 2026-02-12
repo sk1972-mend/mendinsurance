@@ -38,6 +38,9 @@ const routeLabels: Record<string, string> = {
   apply: 'Apply',
 };
 
+// Check if a segment looks like a UUID
+const isUuid = (s: string) => /^[0-9a-f]{8}-/.test(s);
+
 export function DashboardLayout() {
   const { user, signOut } = useAuth();
   const location = useLocation();
@@ -78,7 +81,9 @@ export function DashboardLayout() {
                   {pathSegments.map((segment, index) => {
                     const isLast = index === pathSegments.length - 1;
                     const path = '/' + pathSegments.slice(0, index + 1).join('/');
-                    const label = routeLabels[segment] || segment.charAt(0).toUpperCase() + segment.slice(1);
+                    const label = isUuid(segment)
+                      ? `#${segment.slice(0, 8).toUpperCase()}`
+                      : routeLabels[segment] || segment.charAt(0).toUpperCase() + segment.slice(1);
 
                     return (
                       <BreadcrumbItem key={path}>
